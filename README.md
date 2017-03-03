@@ -1,6 +1,7 @@
 # db_table_report
 数据库库表获取程序
 1、表结构
+
 CREATE TABLE `db_table` (
   `id` int(255) NOT NULL AUTO_INCREMENT,
   `ip` varchar(20) NOT NULL,
