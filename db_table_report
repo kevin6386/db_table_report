@@ -1,0 +1,57 @@
+#!/usr/bin/perl 
+use DBI;
+use strict;
+#调用外部程序获取数据库信息
+my $dbh;
+sub dbcon{
+	my $dsn="DBI:mysql:database=voole_system;host=172.16.20.10;port=3306;mysql_socket=/tmp/mysql.sock";
+	 $dbh = DBI->connect("$dsn","db","db*&%") or die "connect is error !".DBI->errstr;
+	 $dbh->do("SET names utf8");
+}
+my $local_ip=`/sbin/ifconfig |grep inet| grep -i bcast|cut -d':' -f2|awk '{print \$1}'`;
+chomp($local_ip);
+sub insert_table{
+	&dbcon();
+	my $info=$_[0];
+        my @infos=split(/\|/,$info);
+        my $db=$infos[0];
+        my $table=$infos[1];
+        my $ch="select count(*) from db_table where `ip`='$local_ip' and `dbname`='$db' and `table`='$table'";
+        my $sth = $dbh->prepare("$ch");
+        $sth->execute();
+        my $num='';
+        while (my @row = $sth->fetchrow_array ) {
+                $num=$row[0];
+        }
+        my $fsql="";
+        if($num eq 0 ){
+                $fsql="INSERT INTO `db_table` (`ip`, `dbname`,`table`) VALUES ('$local_ip', '$db','$table')";
+        	my $i=$dbh->do($fsql);
+        }
+
+}
+sub db_table{
+        my $dsn1="DBI:mysql:database=information_schema;host=localhost;port=3306;mysql_socket=/tmp/mysql.sock";
+        my $dbh = DBI->connect("$dsn1","back","back") or die "??¨l??? ".DBI->errstr;
+        my $dbsql="select DISTINCT(TABLE_SCHEMA) from `TABLES` where TABLE_SCHEMA not in ('mysql','information_schema','test','performance_schema')";
+        my $sth = $dbh->prepare($dbsql);
+        $sth->execute();
+        my $db;
+	my $table;
+        while (my @row = $sth->fetchrow_array ) {
+                $db=$row[0];
+		my $tal="select TABLE_NAME from `TABLES` where  TABLE_SCHEMA='$db' ";
+		my $sth = $dbh->prepare($tal);
+	        $sth->execute();
+		my $table;
+		while (my @row = $sth->fetchrow_array ) {
+			$table=$row[0];
+			my $dbtable="$db|$table";
+			chomp($dbtable);
+			&insert_table($dbtable);
+		}
+
+        }
+
+}
+&db_table();
