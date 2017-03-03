@@ -4,7 +4,7 @@ use strict;
 #调用外部程序获取数据库信息
 my $dbh;
 sub dbcon{
-	my $dsn="DBI:mysql:database=voole_system;host=172.16.20.10;port=3306;mysql_socket=/tmp/mysql.sock";
+	my $dsn="DBI:mysql:database=system;host=172.16.20.10;port=3306;mysql_socket=/tmp/mysql.sock";
 	 $dbh = DBI->connect("$dsn","db","db*&%") or die "connect is error !".DBI->errstr;
 	 $dbh->do("SET names utf8");
 }
