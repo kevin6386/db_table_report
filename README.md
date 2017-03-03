@@ -23,3 +23,10 @@ CREATE TABLE `db_table` (
 
 
 3、授权根据情况自行授权即可
+
+	  修改地方：
+    my $dsn="DBI:mysql:database=system;host=ip;port=3306;mysql_socket=/tmp/mysql.sock";
+	  $dbh = DBI->connect("$dsn","user","pass") or die "error".DBI->errstr;
+
+4、下载程序执行运行即可。可能需要一些插件yum安装即可。
+将会把本地实例的库表信息进行汇报
