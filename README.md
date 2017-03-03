@@ -16,3 +16,7 @@ CREATE TABLE `db_table` (
   KEY `idx_ip_db` (`ip`,`dbname`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=63131 DEFAULT CHARSET=utf8 COMPRESSION='lz4';
 
+2、创建库
+create database system;
+
+3、授权根据情况自行授权即可
