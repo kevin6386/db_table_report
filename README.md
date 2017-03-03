@@ -1,7 +1,10 @@
 # db_table_report
 数据库库表获取程序
+
 1、创建库
+
 create database system;
+
 2、创建表
 
 CREATE TABLE `db_table` (
